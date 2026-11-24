@@ -31,7 +31,7 @@ class RunnerTests(unittest.TestCase):
         with patch.dict(os.environ, {"OHANDS_PROMPT": "Review files\n\nExplain bugs."}, clear=True), patch.dict(sys.modules, self.modules):
             self.main()
             options = self.sdk.LLM.call_args.kwargs
-            self.assertEqual(options["base_url"], "http://127.0.0.1:3100/v1")
+            self.assertEqual(options["base_url"], "http://127.0.0.1:7331/v1")
             self.assertEqual(options["model"], "openai/gemini-2.5-pro")
             self.assertEqual(options["api_mode"], "chat")
             self.assertTrue(options["native_tool_calling"])
@@ -86,9 +86,9 @@ class RunnerTests(unittest.TestCase):
     def test_project_example_configures_the_separate_runner(self):
         example = Path(__file__).resolve().parents[1] / ".env.example"
         modules = {**self.modules, "dotenv": dotenv}
-        with patch.dict(os.environ, {"AIGW_CONFIG": str(example)}, clear=True), patch.dict(sys.modules, modules):
+        with patch.dict(os.environ, {"AIGW_CONFIG": str(example), "AIGW_WORKSPACE": str(example.parent)}, clear=True), patch.dict(sys.modules, modules):
             self.main()
-        self.assertEqual(self.sdk.LLM.call_args.kwargs["base_url"], "http://localhost:3100/v1")
+        self.assertEqual(self.sdk.LLM.call_args.kwargs["base_url"], "http://localhost:7331/v1")
         self.assertEqual(self.sdk.Conversation.call_args.kwargs["workspace"], str(example.parent))
         expected = dotenv.dotenv_values(example)["OHANDS_PROMPT"]
         self.assertIn("\n\n", expected)
