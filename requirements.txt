@@ -1,0 +1,8 @@
+# Python 3.12 or newer.
+# OpenHands versions match the local software-agent-sdk checkout.
+# Pin ACP compatibility and the enterprise-approved LiteLLM version.
+openhands-sdk==1.44.1
+openhands-tools==1.44.1
+python-dotenv==1.2.2
+agent-client-protocol==0.10.1
+litellm==1.110.3
